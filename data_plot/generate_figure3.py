@@ -1,7 +1,14 @@
+import os
 import pickle
 import sys
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
+
+_DATA_PLOT = Path(__file__).resolve().parent
+_SAFE = _DATA_PLOT.parent
+sys.path.insert(0, str(_DATA_PLOT))
+sys.path.insert(0, str(_SAFE))
+os.chdir(_DATA_PLOT)
 
 import numpy as np
 import matplotlib as mpl
@@ -10,12 +17,11 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.transforms import blended_transform_factory
 from scipy.signal import hilbert
 
-sys.path.append("..")
 from drive_detuning_converter import A_to_detuning_mhz, sc
 from helper.system import Hamiltonian
 
 # ── Style (normal_plot from plot_instruction) ─────────────────────
-_style_path = Path(__file__).resolve().parent.parent / "plot_instruction"
+_style_path = _SAFE / "plot_instruction"
 _style_mod = SourceFileLoader("plot_instruction_mod_total_rate", str(_style_path)).load_module()
 normal_plot = _style_mod.normal_plot
 fig_width = _style_mod.fig_width
@@ -207,5 +213,5 @@ ax_ramsey.text(t_plot[idx_u], env_undriven[idx_u] - 0.06, "Undriven",
 _panel_label(ax_ramsey, "(d)")
 
 fig.savefig("figure3.pdf", bbox_inches="tight", pad_inches=0.04)
-print("Saved: figure3.pdf")
+print(f"Saved: {_DATA_PLOT / 'figure3.pdf'}")
 plt.close(fig)

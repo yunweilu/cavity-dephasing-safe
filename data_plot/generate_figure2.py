@@ -2,7 +2,10 @@ import sys
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
 
-sys.path.append("..")
+_DATA_PLOT = Path(__file__).resolve().parent
+_ROOT = _DATA_PLOT.parent
+sys.path.insert(0, str(_DATA_PLOT))
+sys.path.insert(0, str(_ROOT))
 
 import pickle
 import numpy as np
@@ -12,8 +15,7 @@ from matplotlib.colors import LogNorm
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from helper.system import Hamiltonian
 
-# ── Style from SNAIL_new/plot_instruction ────────────────────────
-_ROOT = Path(__file__).resolve().parents[1]
+# ── Style from plot_instruction ──────────────────────────────────
 _style = SourceFileLoader(
     "plot_instruction_perturbation",
     str(_ROOT / "plot_instruction"),
@@ -152,10 +154,9 @@ cbar.set_label(
     labelpad=6,
 )
 
-tex_dir = Path("/Users/yunwei/Desktop/project/cavity dephasing/6949db0bfd19311f68336ca1/Sec 2")
-tex_dir.mkdir(parents=True, exist_ok=True)
+tex_dir = _DATA_PLOT
 plt.savefig(tex_dir / "figure2.pdf")
-plt.savefig("figure2.pdf")
+print(f"Saved: {tex_dir / 'figure2.pdf'}")
 plt.close(fig)
 
 # ══════════════════════════════════════════════════════════════════
@@ -186,5 +187,5 @@ ax_ins.set_yticks(np.arange(y0_ins, y1_ins + 0.001, 0.01), minor=True)
 ax_ins.tick_params(labelsize=8, which="both", direction="in", top=False, right=False)
 
 fig_ins.savefig(tex_dir / "figure2_inse.pdf")
-fig_ins.savefig("figure2_inse.pdf")
+print(f"Saved: {tex_dir / 'figure2_inse.pdf'}")
 plt.close(fig_ins)

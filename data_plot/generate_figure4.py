@@ -4,7 +4,10 @@ import importlib.util
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
 
-sys.path.append('..')
+_DATA_PLOT = Path(__file__).resolve().parent
+_SAFE = _DATA_PLOT.parent
+sys.path.insert(0, str(_DATA_PLOT))
+sys.path.insert(0, str(_SAFE))
 
 import numpy as np
 import matplotlib
@@ -13,10 +16,8 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 # Dual-rail static sweep + Bell comparison
-_SAFE = Path(__file__).resolve().parents[1]
 _SIM_BINOM = _SAFE / "simulations" / "binomial_density_matrix"
 _SIM_DUAL = _SAFE / "simulations" / "dual_rail_bell"
-_DATA_PLOT = Path(__file__).resolve().parent
 _QEC_PDF = _DATA_PLOT / "figure4.pdf"
 
 _PI_PATH = _DATA_PLOT.parent / "plot_instruction"

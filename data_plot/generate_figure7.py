@@ -116,18 +116,13 @@ def main():
     )
 
     local_dir = Path(__file__).resolve().parent
-    tex_dir = Path(
-        "/Users/yunwei/Desktop/project/cavity dephasing/6949db0bfd19311f68336ca1/Appendix"
-    )
-    tex_dir.mkdir(parents=True, exist_ok=True)
     fig.tight_layout()
-    for out_dir in (local_dir, tex_dir):
-        out_pdf = out_dir / "figure7.pdf"
-        out_png = out_dir / "noise_spectrum_plot.png"
-        fig.savefig(out_pdf)
-        fig.savefig(out_png, dpi=300)
-        print(f"Saved: {out_pdf}")
-        print(f"Saved: {out_png}")
+    out_pdf = local_dir / "figure7.pdf"
+    out_png = local_dir / "noise_spectrum_plot.png"
+    fig.savefig(out_pdf)
+    fig.savefig(out_png, dpi=300)
+    print(f"Saved: {out_pdf}")
+    print(f"Saved: {out_png}")
     plt.close(fig)
 
 

@@ -1,10 +1,13 @@
 import sys
-sys.path.append('..')
+from pathlib import Path
+
+_DATA_PLOT = Path(__file__).resolve().parent
+_SAFE = _DATA_PLOT.parent
+sys.path.insert(0, str(_SAFE))
 
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from pathlib import Path
 from joblib import Parallel, delayed
 from helper.system import Hamiltonian
 
@@ -126,10 +129,7 @@ ax.xaxis.set_major_locator(MaxNLocator(nbins=5))
 ax.yaxis.set_major_locator(MaxNLocator(nbins=5))
 
 # ── Save ───────────────────────────────────────────────────────
-tex_dir = Path('/Users/yunwei/Desktop/project/cavity dephasing'
-               '/6949db0bfd19311f68336ca1/Appendix')
-tex_dir.mkdir(parents=True, exist_ok=True)
-plt.savefig(tex_dir / 'figure6.pdf')
-plt.savefig('figure6.pdf')
-print('Saved: figure6.pdf')
+out_pdf = _DATA_PLOT / "figure6.pdf"
+plt.savefig(out_pdf)
+print(f"Saved: {out_pdf}")
 plt.close()

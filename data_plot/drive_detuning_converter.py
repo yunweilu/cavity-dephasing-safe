@@ -4,7 +4,12 @@ that minimizes the transmon quasi-energy |e_quasi[1]|,
 and return the detuning omega_d - omega_transmon.
 """
 import sys
-sys.path.append('..')
+from pathlib import Path
+
+# Allow `from drive_detuning_converter import ...` when cwd is not data_plot
+_DATA_PLOT = Path(__file__).resolve().parent
+_SAFE = _DATA_PLOT.parent
+sys.path.insert(0, str(_SAFE))
 
 import numpy as np
 from scipy.optimize import minimize_scalar

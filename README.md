@@ -23,13 +23,17 @@ For Jupyter notebooks under `simulations/`:
 
 ```bash
 pip install -e ".[notebooks]"
+python -m ipykernel install --user --name=cavity-dephasing-safe --display-name="Python (SAFE)"
 ```
 
-After a successful editable install you can import the helper package from anywhere:
+Then select the **Python (SAFE)** kernel in Jupyter / VS Code / Cursor.
+
+After a successful editable install you can import the helper package from anywhere **while your working directory is inside the cloned repo**:
 
 ```python
 from helper.system import Hamiltonian
 from helper.noise_generator import GenerateNoise
+from helper.paths import repo_root, simulation_dir
 ```
 
 ## Repository layout
@@ -44,21 +48,21 @@ from helper.noise_generator import GenerateNoise
 
 ## Regenerate figures
 
-Run scripts from `data_plot/` so relative paths resolve correctly:
+You can run scripts from **any cwd** (paths are resolved from `__file__`):
 
 ```bash
-cd data_plot
+cd cavity-dephasing-safe
 export MPLBACKEND=Agg   # non-interactive backend (recommended for scripts)
 
-python generate_figure2.py
-python generate_figure3.py
-python generate_figure4.py
-python generate_figure6.py
-python generate_figure7.py
-python generate_figure8.py
+python data_plot/generate_figure2.py
+python data_plot/generate_figure3.py
+python data_plot/generate_figure4.py
+python data_plot/generate_figure6.py
+python data_plot/generate_figure7.py
+python data_plot/generate_figure8.py
 ```
 
-Outputs are written as `figure2.pdf` … `figure8.pdf` (and `figure2_inse.pdf`, `noise_spectrum_plot.png`) in `data_plot/`.
+Outputs are written into `data_plot/` (`figure2.pdf` … `figure8.pdf`, plus `figure2_inse.pdf` and `noise_spectrum_plot.png`).
 
 ### Data used by each figure
 
@@ -72,6 +76,18 @@ Outputs are written as `figure2.pdf` … `figure8.pdf` (and `figure2_inse.pdf`, 
 | 8 | `simulations/preparation_fidelity/preparation_fidelity_data.npz` |
 
 See `simulations/README.md` for how those data files were produced.
+
+## Run simulation notebooks
+
+Start Jupyter **from the cloned repository** (repo root or any subdirectory), then open:
+
+| Notebook | Folder |
+|----------|--------|
+| `full_simulation_ramsey.ipynb` | `simulations/ramsey_sigmax/` |
+| `full_simulation_totalrate.ipynb` | `simulations/total_rate/` |
+| `full_simulation_plot.ipynb` | `simulations/preparation_fidelity/` |
+
+The first cell uses `helper.paths.simulation_dir(...)` to `chdir` into the correct simulation folder and put local modules (`system.py`, `hamiltonian_generator.py`, `noise_generator.py`) on `sys.path`.
 
 ## Dependencies
 

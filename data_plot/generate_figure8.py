@@ -1,16 +1,23 @@
+import sys
+from pathlib import Path
+from importlib.machinery import SourceFileLoader
+
+_DATA_PLOT = Path(__file__).resolve().parent
+_SAFE = _DATA_PLOT.parent
+sys.path.insert(0, str(_DATA_PLOT))
+sys.path.insert(0, str(_SAFE))
+
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from pathlib import Path
-from importlib.machinery import SourceFileLoader
 from drive_detuning_converter import A_to_detuning_mhz
 
-_style_path = Path(__file__).resolve().parent.parent / "plot_instruction"
+_style_path = _SAFE / "plot_instruction"
 _style_mod = SourceFileLoader("plot_instruction_mod", str(_style_path)).load_module()
 normal_plot = _style_mod.normal_plot
 add_axis_arrows = _style_mod.add_axis_arrows
 
-_PREP_NPZ = Path(__file__).resolve().parents[1] / "simulations" / "preparation_fidelity" / "preparation_fidelity_data.npz"
+_PREP_NPZ = _SAFE / "simulations" / "preparation_fidelity" / "preparation_fidelity_data.npz"
 data = np.load(_PREP_NPZ, allow_pickle=True)
 ramp_times = data['ramp_times']
 
@@ -50,12 +57,7 @@ ax.set_ylabel('Infidelity')
 ax.legend()
 ax.set_yscale('log')
 add_axis_arrows(ax)
-_out = Path(__file__).resolve().parent / "figure8.pdf"
-_tex = Path(
-    "/Users/yunwei/Desktop/project/cavity dephasing/6949db0bfd19311f68336ca1/Appendix"
-)
-_tex.mkdir(parents=True, exist_ok=True)
+_out = _DATA_PLOT / "figure8.pdf"
 plt.savefig(_out)
-plt.savefig(_tex / "figure8.pdf")
 print(f"Saved: {_out}")
 plt.close()
