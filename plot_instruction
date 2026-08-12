@@ -1,0 +1,184 @@
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+mpl.rcParams["svg.fonttype"] = "path"   # for SVG
+mpl.rcParams["pdf.fonttype"] = 42       # TrueType in PDF when usetex is off
+
+# ══════════════════════════════════════════════════════════════════
+# Typography — match manuscript LaTeX (Computer Modern)
+# ══════════════════════════════════════════════════════════════════
+_typography = {
+    "text.usetex": True,
+    "font.family": "serif",
+    "text.latex.preamble": r"\usepackage{amsmath,amssymb}",
+}
+
+# ══════════════════════════════════════════════════════════════════
+# Normal plot (single-column width, small fonts)
+# ══════════════════════════════════════════════════════════════════
+fig_width_pt = 246.0
+inches_per_pt = 1.0 / 72.27
+fig_width = fig_width_pt * inches_per_pt
+fig_height = fig_width / 1.45
+
+normal_plot = {
+    "figure.figsize": (fig_width, fig_height),
+    "figure.dpi": 150,
+    "savefig.dpi": 600,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.02,
+
+    "font.size": 8.5,
+    "axes.labelsize": 9,
+    "xtick.labelsize": 8,
+    "ytick.labelsize": 8,
+    "legend.fontsize": 8,
+
+    "lines.linewidth": 1.6,
+    "lines.markersize": 4.0,
+
+    "axes.linewidth": 0.8,
+    "xtick.direction": "in",
+    "ytick.direction": "in",
+    "xtick.major.size": 3.5,
+    "ytick.major.size": 3.5,
+    "xtick.major.width": 0.8,
+    "ytick.major.width": 0.8,
+    "xtick.minor.visible": True,
+    "ytick.minor.visible": True,
+    "xtick.minor.size": 2.0,
+    "ytick.minor.size": 2.0,
+
+    "axes.spines.top": True,
+    "axes.spines.right": True,
+    "axes.spines.left": True,
+    "axes.spines.bottom": True,
+    "legend.frameon": False,
+    "axes.grid": False,
+}
+normal_plot.update(_typography)
+
+# Square single-column panel (e.g. 2D heatmaps)
+square_plot = dict(normal_plot)
+square_plot["figure.figsize"] = (fig_width, fig_width)
+
+# ══════════════════════════════════════════════════════════════════
+# Small plot (square, large fonts for inset / subfigure use)
+# ══════════════════════════════════════════════════════════════════
+sz = 4.0  # square figure size in inches
+
+small_plot = {
+    "figure.figsize": (sz, sz),
+    "figure.dpi": 150,
+    "savefig.dpi": 600,
+    "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.02,
+
+    "font.size": 18,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 16,
+    "ytick.labelsize": 16,
+    "legend.fontsize": 16,
+
+    "lines.linewidth": 2.0,
+    "lines.markersize": 5.0,
+
+    "axes.linewidth": 1.2,
+    "xtick.direction": "in",
+    "ytick.direction": "in",
+    "xtick.major.size": 5,
+    "ytick.major.size": 5,
+    "xtick.major.width": 1.2,
+    "ytick.major.width": 1.2,
+    "xtick.minor.visible": True,
+    "ytick.minor.visible": True,
+    "xtick.minor.size": 3.0,
+    "ytick.minor.size": 3.0,
+
+    "axes.spines.top": True,
+    "axes.spines.right": True,
+    "axes.spines.left": True,
+    "axes.spines.bottom": True,
+    "legend.frameon": False,
+    "axes.grid": False,
+}
+small_plot.update(_typography)
+
+# Usage:
+#   mpl.rcParams.update(normal_plot)    # full-width manuscript figures
+#   mpl.rcParams.update(square_plot)   # square heatmaps / phase plots
+#   mpl.rcParams.update(small_plot)    # small subfigures / insets
+
+
+def add_axis_arrows(ax, arrow_lw=0.8, arrow_color="black", arrow_scale=1.0):
+    """Add arrowheads to x/y axis ends in axes coordinates."""
+    ax.annotate(
+        "",
+        xy=(1.02, 0.0),
+        xytext=(1.0, 0.0),
+        xycoords="axes fraction",
+        textcoords="axes fraction",
+        arrowprops=dict(
+            arrowstyle="-|>",
+            lw=arrow_lw,
+            color=arrow_color,
+            mutation_scale=10 * arrow_scale,
+        ),
+    )
+    ax.annotate(
+        "",
+        xy=(0.0, 1.02),
+        xytext=(0.0, 1.0),
+        xycoords="axes fraction",
+        textcoords="axes fraction",
+        arrowprops=dict(
+            arrowstyle="-|>",
+            lw=arrow_lw,
+            color=arrow_color,
+            mutation_scale=10 * arrow_scale,
+        ),
+    )
+
+
+def add_resonant_region(ax, x_min, x_max, y_min, y_max, label=True):
+    """Shade / outline the region |Omega_0| >= |Delta_bd| (y >= |x| in MHz units)."""
+    y_line = np.linspace(y_min, y_max, 800)
+    x_left_clip = np.clip(-y_line, x_min, x_max)
+    x_right_clip = np.clip(y_line, x_min, x_max)
+    ax.fill_betweenx(
+        y_line, x_left_clip, x_right_clip,
+        facecolor="white", alpha=0.22, hatch="///",
+        edgecolor="gray", linewidth=0.0, zorder=3, rasterized=True,
+    )
+    mask_l = (-y_line >= x_min) & (-y_line <= x_max)
+    mask_r = (y_line >= x_min) & (y_line <= x_max)
+    ax.plot(-y_line[mask_l], y_line[mask_l], "-", color="gray", lw=0.8, zorder=4)
+    lbl = "resonant region" if label else None
+    ax.plot(y_line[mask_r], y_line[mask_r], "-", color="gray", lw=0.8,
+            zorder=4, label=lbl)
+
+
+# Arrow usage:
+#   add_axis_arrows(ax)
+
+# Readable at final size
+# Choose font sizes, line widths, and marker sizes based on how the figure appears after scaling in the manuscript (printable and readable on letter-size pages).
+
+# Colorblind-safe design
+# Use palettes and encodings that remain distinguishable for color vision deficiencies (roughly ~8% of men). Validate with a simulator when possible.
+
+# Typography
+# Use LaTeX (Computer Modern) via text.usetex for consistency with the manuscript.
+
+# Axes frame
+# Keep a full box (all four spines) on every panel.
+
+# Prefer direct labeling over detached legends
+# When feasible, label lines/curves directly near data instead of forcing reader eye-jumps to a separate legend.
+
+# Message-first figure design
+# Start from the core scientific claim. Reduce reader cognitive load: avoid requiring mental integration (e.g., inferring areas/averages/comparisons) when it can be shown directly.
+
+# Cross-figure style consistency
+# Keep visual language consistent across the paper: fonts, scale, colors, line styles, and annotation patterns.

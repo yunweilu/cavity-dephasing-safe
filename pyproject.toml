@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=75.1.0", "wheel>=0.44.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cavity-dephasing-safe"
+version = "0.1.0"
+description = "SAFE figure generators and Hamiltonian helpers for cavity-dephasing paper"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "SAFE" }]
+dependencies = [
+    # Core scientific stack (versions from fluxonium conda env)
+    "numpy==2.2.4",
+    "scipy==1.13.1",
+    "matplotlib==3.9.4",
+    "qutip==5.1.1",
+    "scqubits==4.2.0",
+    "colorednoise==2.2.0",
+    "joblib==1.4.2",
+    "jax==0.5.2",
+    "jaxlib==0.5.1",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "jupyter==1.1.1",
+    "jupyterlab==4.2.6",
+    "ipykernel==6.29.5",
+    "ipython==8.29.0",
+    "notebook==7.2.2",
+]
+dev = [
+    "cavity-dephasing-safe[notebooks]",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["helper*"]
