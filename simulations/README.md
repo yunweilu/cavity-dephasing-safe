@@ -6,7 +6,7 @@ Run generators from their folder (or set cwd accordingly) so relative output pat
 
 | Folder | Output | Generator | Used by |
 |--------|--------|-----------|---------|
-| `total_rate/` | `total_rate.pkl` (from intermediate `total_rate_raw_data.pkl`) | `full_simulation_totalrate.ipynb` | `data_plot/generate_figure3.py` |
+| `total_rate/` | `total_rate.pkl` (from intermediate `total_rate_raw_data.pkl`) | `full_simulation_totalrate.ipynb` (**~1 day** for full raw grid; raw pickle was deleted accidentally — re-run notebook to regenerate locally) | `data_plot/generate_figure3.py` |
 | `ramsey_sigmax/` | `ramsey_sigmax_data.pkl` | `full_simulation_ramsey.ipynb` | `data_plot/generate_figure3.py` |
 | `preparation_fidelity/` | `preparation_fidelity_data.npz` | `full_simulation_plot.ipynb` | `data_plot/generate_figure8.py` |
 | `binomial_density_matrix/` | `avg_density_matrix_over_time_undriven_driven.pkl` | `average_density_matrix_simulation.py` | `data_plot/generate_figure4.py` |

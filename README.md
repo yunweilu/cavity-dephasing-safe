@@ -69,7 +69,7 @@ Outputs are written into `data_plot/` (`figure2.pdf` … `figure8.pdf`, plus `fi
 | Figure | Input data |
 |--------|------------|
 | 2 | `simulations/rates_bundle/rates_bundle.pkl` |
-| 3 | `simulations/total_rate/total_rate.pkl`, `simulations/ramsey_sigmax/ramsey_sigmax_data.pkl` |
+| 3 | `simulations/total_rate/total_rate.pkl` (processed; raw `total_rate_raw_data.pkl` was deleted — re-run notebook ~1 day to regenerate), `simulations/ramsey_sigmax/ramsey_sigmax_data.pkl` |
 | 4 | `simulations/binomial_density_matrix/avg_density_matrix_over_time_undriven_driven.pkl`, `simulations/dual_rail_bell/final_data_{undriven,driven}.pkl` |
 | 6 | none (computed on the fly) |
 | 7 | none (noise generated on the fly) |
@@ -84,7 +84,7 @@ Start Jupyter **from the cloned repository** (repo root or any subdirectory), th
 | Notebook | Folder |
 |----------|--------|
 | `full_simulation_ramsey.ipynb` | `simulations/ramsey_sigmax/` |
-| `full_simulation_totalrate.ipynb` | `simulations/total_rate/` |
+| `full_simulation_totalrate.ipynb` | `simulations/total_rate/` (~1 day; regenerates missing `total_rate_raw_data.pkl` then `total_rate.pkl`) |
 | `full_simulation_plot.ipynb` | `simulations/preparation_fidelity/` |
 
 The first cell uses `helper.paths.simulation_dir(...)` to `chdir` into the correct simulation folder and put local modules (`system.py`, `hamiltonian_generator.py`, `noise_generator.py`) on `sys.path`.
